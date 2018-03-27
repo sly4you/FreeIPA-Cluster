@@ -149,3 +149,7 @@ Step 12 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.loc
 
 Final step: installation client
 yum install ipa-client ipa-admintools
+
+Verify this setting in /etc/sssd/sssd.conf
+ipa_server = _srv_, ipa-slave.valsecchi.local
+
