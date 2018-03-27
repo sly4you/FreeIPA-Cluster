@@ -146,3 +146,6 @@ Step 12 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.loc
       Global DNS configuration in LDAP server is empty
       You can use 'dnsconfig-mod' command to set global DNS options that would override settings in local named.conf files
       Restarting the web server
+
+Final step: installation client
+yum install ipa-client ipa-admintools
