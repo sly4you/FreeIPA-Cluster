@@ -151,5 +151,5 @@ Final step: installation client
 yum install ipa-client ipa-admintools
 
 Verify this setting in /etc/sssd/sssd.conf
-ipa_server = _srv_, ipa-slave.valsecchi.local
+ipa_server = _srv_, ipa-slave.mydomain.local
 
