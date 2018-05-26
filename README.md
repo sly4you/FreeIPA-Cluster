@@ -1,4 +1,4 @@
-# FreeIPA-Cluster
+# FreeIPA-Cluster#
 
 This is a very small guide to deploy FreeIPA in HA, included settings for clients
 
@@ -27,12 +27,12 @@ nmcli con mod eth0 ipv4.dns 127.0.0.1 && nmcli con up eth0
 
 Step 8 - Setup FreeIPA server
 ipa-server-install
- 
+
  Answer:
   Do you want to configure integrated DNS (BIND)? [no]: yes
   Server host name [ipa.mydomain.local]:
   Please confirm the domain name [domain.local]:
-  Please provide a realm name [DOMAIN.LOCAL]:
+  Please provide a realm name [MYDOMAIN.LOCAL]:
   Directory Manager password:
   Password (confirm):
   IPA admin password:
@@ -44,7 +44,6 @@ ipa-server-install
    Enter an IP address for a DNS forwarder, or press Enter to skip: 8.8.8.8
    DNS forwarder 8.8.8.8 added. You may add another.
    Enter an IP address for a DNS forwarder, or press Enter to skip: 8.8.4.4
-   
  In case of NO:
    Do you want to configure DNS forwarders? [yes]: no
    No DNS forwarders configured
@@ -53,39 +52,40 @@ ipa-server-install
  Do you want to create reverse zone for IP 192.168.100.10 [yes]:
  Please specify the reverse zone name [100.168.192.in-addr.arpa.]:
  Continue to configure the system with these values? [no]: >> YES
-
+ 
  ==============================================================================
  Setup complete
 
  Next steps:
-	1. You must make sure these network ports are open:
-		TCP Ports:
-		  * 80, 443: HTTP/HTTPS
-		  * 389, 636: LDAP/LDAPS
-		  * 88, 464: kerberos
-		  * 53: bind
-		UDP Ports:
-		  * 88, 464: kerberos
-		  * 53: bind
-		  * 123: ntp
+   1. You must make sure these network ports are open:
+       TCP Ports:
+         * 80, 443: HTTP/HTTPS
+	 * 389, 636: LDAP/LDAPS
+	 * 88, 464: kerberos
+	 * 53: bind
+       UDP Ports:
+         * 88, 464: kerberos
+	 * 53: bind
+	 * 123: ntp
 
-	2. You can now obtain a kerberos ticket using the command: 'kinit admin'
-	   This ticket will allow you to use the IPA tools (e.g., ipa user-add)
-	   and the web user interface.
+   2. You can now obtain a kerberos ticket using the command: 'kinit admin'
+      This ticket will allow you to use the IPA tools (e.g., ipa user-add)
+      and the web user interface.
 
-  Be sure to back up the CA certificates stored in /root/cacert.p12
-  These files are required to create replicas. The password for thes files is the Directory Manager password
+Be sure to back up the CA certificates stored in /root/cacert.p12
+These files are required to create replicas. The password for thes files is the Directory Manager password
 
-Step 10 - Firewall
-firewall-cmd --permanent --add-service={ntp,http,https,ldap,ldaps,kerberos,kpasswd}
-firewall-cmd --permanent --add-port=53/udp 
-firewall-cmd --reload
+Step 8 - Firewall
+  firewall-cmd --permanent --add-service={ntp,http,https,ldap,ldaps,kerberos,kpasswd}
+  firewall-cmd --permanent --add-port=53/udp 
+  firewall-cmd --reload
 
-Step 11 - Check if ipa work
+Step 9 - Check if ipa work
   On the ipa server cli
     kinit admin
-    Password for admin@DOMAIN.LOCAL:
-    ipa user-find
+    Password for admin@MYDOMAIN.LOCAL:
+      
+      ipa user-find
       --------------
       1 user matched
       --------------
@@ -93,15 +93,15 @@ Step 11 - Check if ipa work
       Last name: Administrator
       Home directory: /home/admin
       Login shell: /bin/bash
-      Principal alias: admin@VALSECCHI.LOCAL
+      Principal alias: admin@MYDOMAIN.LOCAL
       UID: 1608400000
       GID: 1608400000
       Account disabled: False
       ----------------------------
       Number of entries returned 1
       ----------------------------
-     
-Step 12 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.local)
+# Additional Steps for Slave replication
+Step 11 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.local)
   On the slave:
     yum -y update
     hostnamectl set-hostname ipa.mydomain.local
