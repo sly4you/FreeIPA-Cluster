@@ -1,11 +1,11 @@
-# FreeIPA-Cluster#
+# FreeIPA-Cluster #
 
 This is a very small guide to deploy FreeIPA in HA, included settings for clients
 
 This guide is written for CentOS/RHEL but, apart installation steps, you can adopt in other system, after FreeIPA installation
 
 * Step 1 - Update system
-> `yum -y update`
+`yum -y update`
 
 * Step 2 - Modify hostname
 `hostnamectl set-hostname ipa.mydomain.local`
