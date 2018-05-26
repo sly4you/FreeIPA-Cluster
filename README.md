@@ -28,7 +28,7 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 * Step 8 - Setup FreeIPA server<br/>
 `ipa-server-install`
 
- Answer:
+	  Answer:
      Do you want to configure integrated DNS (BIND)? [no]: yes
       Server host name [ipa.mydomain.local]:
       Please confirm the domain name [domain.local]
@@ -37,8 +37,7 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
       Password (confirm):
       IPA admin password:
       Password (confirm):
-      Do you want to configure DNS forwarders? [yes]:
-	  >> If you have or want a forwarder, otherwise answer NO
+      Do you want to configure DNS forwarders? [yes]:>> If you have or want a forwarder, otherwise answer NO
 
 	  In case of YES:
        Following DNS servers are configured in /etc/resolv.conf: 127.0.0.1
