@@ -128,7 +128,7 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 	
     `firewall-cmd --add-service=freeipa-replication --permanent`<br/>
 	
-    `firewall-cmd --reload`
+    `firewall-cmd --reload`<br/>
   
   On the slave:
     `dig -x 192.168.1.11` (check if ptr reord is ok)
