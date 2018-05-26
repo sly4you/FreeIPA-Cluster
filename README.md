@@ -29,15 +29,16 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 `ipa-server-install`
 
 	  Answer:
-     Do you want to configure integrated DNS (BIND)? [no]: yes
-      Server host name [ipa.mydomain.local]:
-      Please confirm the domain name [domain.local]
-      Please provide a realm name [MYDOMAIN.LOCAL]:
-      Directory Manager password:
-      Password (confirm):
-      IPA admin password:
-      Password (confirm):
-      Do you want to configure DNS forwarders? [yes]:>> If you have or want a forwarder, otherwise answer NO
+	  Do you want to configure integrated DNS (BIND)? [no]: yes
+	  Server host name [ipa.mydomain.local]:
+	  Please confirm the domain name [domain.local]
+	  Please provide a realm name [MYDOMAIN.LOCAL]:
+	  Directory Manager password:
+	  Password (confirm):
+	  IPA admin password:
+	  Password (confirm):
+	  Do you want to configure DNS forwarders? [yes]:
+	  (If you have or want a forwarder, otherwise answer NO)
 
 	  In case of YES:
        Following DNS servers are configured in /etc/resolv.conf: 127.0.0.1
