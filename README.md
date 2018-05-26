@@ -79,13 +79,13 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 	  Be sure to back up the CA certificates stored in /root/cacert.p12
 	  These files are required to create replicas. The password for thes files is the Directory Manager password
 
-* Step 8 - Firewall
+* Step 8 - Firewall<br/>
   `firewall-cmd --permanent --add-service={ntp,http,https,ldap,ldaps,kerberos,kpasswd}`
   `firewall-cmd --permanent --add-port=53/udp`
   `firewall-cmd --reload`
 
-* Step 9 - Check if ipa work
-  On the ipa server cli
+* Step 9 - Check if ipa work<br/>
+  On the ipa server cli<br/>
   `kinit admin`
     
     Password for admin@MYDOMAIN.LOCAL:
