@@ -114,7 +114,8 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
     `yum -y update`<br/>
     `hostnamectl set-hostname ipa.mydomain.local`<br/>
     `echo "192.168.1.11 ipa-slave.mydomain.local ipa-slave" >> /etc/hosts`<br/>
-    `nmcli con mod eth0 ipv4.dns 192.168.1.10 && nmcli con up eth0 (DNS IP address specified MUST is a MASTER IPA)`<br/>
+    `nmcli con mod eth0 ipv4.dns 192.168.1.10 && nmcli con up eth0`<br/>
+	(DNS IP address specified MUST is a MASTER IPA)<br/>
     `yum -y install ipa-server ipa-server-dns bind bind-dyndb-ldap`<br/>
     `systemctl enable named && systemctl start named`<br/>
   
@@ -141,7 +142,7 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 
       Directory Manager (existing master) password:
       Run connection check to master
-      Check connection from replica to remote master 'dlp.srv.world':
+      Check connection from replica to remote master 'ipa.mydomain.local':
       Directory Service: Unsecure port (389): OK
       Directory Service: Secure port (636): OK
       Kerberos KDC: TCP (88): OK
