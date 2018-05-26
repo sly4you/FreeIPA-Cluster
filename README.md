@@ -28,7 +28,7 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 * Step 8 - Setup FreeIPA server<br/>
 `ipa-server-install`
 
- `Answer:
+ Answer:
      Do you want to configure integrated DNS (BIND)? [no]: yes
       Server host name [ipa.mydomain.local]:
       Please confirm the domain name [domain.local]
@@ -167,4 +167,3 @@ Final step: installation client
 
 Verify this setting in /etc/sssd/sssd.conf
 ipa_server = _srv_, ipa-slave.mydomain.local
-
