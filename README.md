@@ -1,4 +1,3 @@
-# FreeIPA-Cluster #
 
 This is a very small guide to deploy FreeIPA in HA, included settings for clients
 
@@ -28,45 +27,50 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 * Step 8 - Setup FreeIPA server
 `ipa-server-install`
 
- Answer:
-  Do you want to configure integrated DNS (BIND)? [no]: yes
-  Server host name [ipa.mydomain.local]:
-  Please confirm the domain name [domain.local]:
-  Please provide a realm name [MYDOMAIN.LOCAL]:
-  Directory Manager password:
-  Password (confirm):
-  IPA admin password:
-  Password (confirm):
-  Do you want to configure DNS forwarders? [yes]: >> If you have or want a forwarder, otherwise answer NO
-  In case of YES:
-   Following DNS servers are configured in /etc/resolv.conf: 127.0.0.1
-   Do you want to configure these servers as DNS forwarders? [yes]: >> NO
-   Enter an IP address for a DNS forwarder, or press Enter to skip: 8.8.8.8
-   DNS forwarder 8.8.8.8 added. You may add another.
-   Enter an IP address for a DNS forwarder, or press Enter to skip: 8.8.4.4
- In case of NO:
-   Do you want to configure DNS forwarders? [yes]: no
-   No DNS forwarders configured
- 
- Do you want to search for missing reverse zones? [yes]:
- Do you want to create reverse zone for IP 192.168.100.10 [yes]:
- Please specify the reverse zone name [100.168.192.in-addr.arpa.]:
- Continue to configure the system with these values? [no]: >> YES
- 
- ==============================================================================
- Setup complete
-
- Next steps:
+    Answer:
+     Do you want to configure integrated DNS (BIND)? [no]: yes
+      Server host name [ipa.mydomain.local]:
+      Please confirm the domain name [domain.local]:
+      Please provide a realm name [MYDOMAIN.LOCAL]:
+      Directory Manager password:
+      Password (confirm):
+      IPA admin password:
+      Password (confirm):
+      Do you want to configure DNS forwarders? [yes]:
+	  >> If you have or want a forwarder, otherwise answer NO
+      
+	  In case of YES:
+       Following DNS servers are configured in /etc/resolv.conf: 127.0.0.1
+       Do you want to configure these servers as DNS forwarders? [yes]: >> NO
+       Enter an IP address for a DNS forwarder, or press Enter to skip: 8.8.8.8
+       DNS forwarder 8.8.8.8 added. You may add another.
+       Enter an IP address for a DNS forwarder, or press Enter to skip: 8.8.4.4
+     
+	 In case of NO:
+       Do you want to configure DNS forwarders? [yes]: no
+       No DNS forwarders configured
+     
+     Do you want to search for missing reverse zones? [yes]:
+     Do you want to create reverse zone for IP 192.168.100.10 [yes]:
+     Please specify the reverse zone name [100.168.192.in-addr.arpa.]:
+     Continue to configure the system with these values? [no]: >> YES
+     
+     =============================================================
+     Setup complete
+	 
+	  Next steps:
    1. You must make sure these network ports are open:
-       TCP Ports:
+       
+	   TCP Ports:
          * 80, 443: HTTP/HTTPS
-	 * 389, 636: LDAP/LDAPS
-	 * 88, 464: kerberos
-	 * 53: bind
-       UDP Ports:
-         * 88, 464: kerberos
-	 * 53: bind
-	 * 123: ntp
+		 * 389, 636: LDAP/LDAPS
+		 * 88, 464: kerberos
+		 * 53: bind
+		 
+      UDP Ports:
+	     * 88, 464: kerberos
+		 * 53: bind
+		 * 123: ntp
 
    2. You can now obtain a kerberos ticket using the command: 'kinit admin'
       This ticket will allow you to use the IPA tools (e.g., ipa user-add)
@@ -82,10 +86,12 @@ These files are required to create replicas. The password for thes files is the 
 
 * Step 9 - Check if ipa work
   On the ipa server cli
-    `kinit admin`
+    
     Password for admin@MYDOMAIN.LOCAL:
+	
+	`ipa user-find`
       
-      ipa user-find
+      
       --------------
       1 user matched
       --------------
@@ -111,19 +117,26 @@ These files are required to create replicas. The password for thes files is the 
     `systemctl enable named && systemctl start named`
   
   On the master ipa:
-    `ipa dnsrecord-add domain.local ipa-slave --a-rec 192.168.100.11 (create the PTR record!!!!)`
+    `ipa dnsrecord-add domain.local ipa-slave --a-rec 192.168.100.11`
     `ipa-replica-prepare ipa-slave.mydomain.local --ip-address 192.168.100.11`
   
   Directory Manager (existing master) password:
-    `scp /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg root@ipa-slave.mydomain.local:/var/lib/ipa/`
+     `scp /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg \ `
+	 `root@ipa-slave.mydomain.local:/var/lib/ipa/`
+	
     `firewall-cmd --add-service=freeipa-replication --permanent`
+	
     `firewall-cmd --reload`
   
   On the slave:
     `dig -x 192.168.1.11` (check if ptr reord is ok)
     `firewall-cmd --add-service={ssh,dns,freeipa-ldap,freeipa-ldaps,freeipa-replication} --permanent`
+	
     `firewall-cmd --reload`
-    `ipa-replica-install --setup-ca --setup-dns --no-forwarders /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg`
+	
+    `ipa-replica-install --setup-ca --setup-dns --no-forwarders \`
+	`/var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg`
+
       Directory Manager (existing master) password:
       Run connection check to master
       Check connection from replica to remote master 'dlp.srv.world':
@@ -140,7 +153,7 @@ These files are required to create replicas. The password for thes files is the 
       Connection from replica to master is OK.
       Start listening on required ports for remote master check
       Get credentials to log in to remote master
-        admin@SRV.WORLD password:
+        admin@MYDOMAIN.LOCAL password:
       Execute check on remote master
       .....
       .....
