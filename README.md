@@ -109,12 +109,12 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
       ----------------------------
 
 # Additional Steps for Slave replication
-* Step 11 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.local)
+* Step 11 - Slave installation (IP: 192.168.100.11 - hostname: ipaslave.mydomain.local)
   On the slave:
     `yum -y update`<br/>
     `hostnamectl set-hostname ipa.mydomain.local`<br/>
-    `echo "192.168.1.11 ipa-slave.mydomain.local ipa-slave" >> /etc/hosts`<br/>
-    `nmcli con mod eth0 ipv4.dns 192.168.1.10 && nmcli con up eth0`<br/>
+    `echo "192.168.100.11 ipa-slave.mydomain.local ipa-slave" >> /etc/hosts`<br/>
+    `nmcli con mod eth0 ipv4.dns 192.168.100.10 && nmcli con up eth0`<br/>
 	(DNS IP address specified MUST is a MASTER IPA)<br/>
     `yum -y install ipa-server ipa-server-dns bind bind-dyndb-ldap`<br/>
     `systemctl enable named && systemctl start named`<br/>
