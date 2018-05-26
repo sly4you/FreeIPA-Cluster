@@ -67,16 +67,15 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 		 * 389, 636: LDAP/LDAPS
 		 * 88, 464: kerberos
 		 * 53: bind
-		 
-      UDP Ports:
+
+	   UDP Ports:
 	     * 88, 464: kerberos
 		 * 53: bind
 		 * 123: ntp
-
-	2. You can now obtain a kerberos ticket using the command: 'kinit admin'
+		2. You can now obtain a kerberos ticket using the command: 'kinit admin'
       This ticket will allow you to use the IPA tools (e.g., ipa user-add)
       and the web user interface.
-
+	  
 	  Be sure to back up the CA certificates stored in /root/cacert.p12
 	  These files are required to create replicas. The password for thes files is the Directory Manager password
 
