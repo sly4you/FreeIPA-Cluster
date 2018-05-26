@@ -4,29 +4,29 @@ This is a very small guide to deploy FreeIPA in HA, included settings for client
 
 This guide is written for CentOS/RHEL but, apart installation steps, you can adopt in other system, after FreeIPA installation
 
-Step 1 - Update system
-yum -y update
+* Step 1 - Update system
+`yum -y update`
 
-Step 2 - Modify hostname
-hostnamectl set-hostname ipa.mydomain.local
+* Step 2 - Modify hostname
+`hostnamectl set-hostname ipa.mydomain.local`
 
-Step 3 - Modify reference on /etc/hosts
-echo "192.168.1.10 ipa.mydomain.local ipa" >> /etc/hosts
+* Step 3 - Modify reference on /etc/hosts
+`echo "192.168.1.10 ipa.mydomain.local ipa" >> /etc/hosts`
 
-Step 4 - ONLY FOR RHEL - Enable subscription
-subscription-manager repos --enable rhel-7-server-optional-rpms
+* Step 4 - ONLY FOR RHEL - Enable subscription
+`subscription-manager repos --enable rhel-7-server-optional-rpms`
 
-Step 5 - Packages installation
-yum -y install ipa-server ipa-server-dns bind bind-dyndb-ldap
+* Step 5 - Packages installation
+`yum -y install ipa-server ipa-server-dns bind bind-dyndb-ldap`
 
-Step 6 - Start and enable named
-systemctl enable named && systemctl start named
+* Step 6 - Start and enable named
+`systemctl enable named && systemctl start named`
 
-Step 7 - Modify DNS reference
-nmcli con mod eth0 ipv4.dns 127.0.0.1 && nmcli con up eth0
+* Step 7 - Modify DNS reference
+`nmcli con mod eth0 ipv4.dns 127.0.0.1 && nmcli con up eth0`
 
-Step 8 - Setup FreeIPA server
-ipa-server-install
+* Step 8 - Setup FreeIPA server
+`ipa-server-install`
 
  Answer:
   Do you want to configure integrated DNS (BIND)? [no]: yes
@@ -75,14 +75,14 @@ ipa-server-install
 Be sure to back up the CA certificates stored in /root/cacert.p12
 These files are required to create replicas. The password for thes files is the Directory Manager password
 
-Step 8 - Firewall
-  firewall-cmd --permanent --add-service={ntp,http,https,ldap,ldaps,kerberos,kpasswd}
-  firewall-cmd --permanent --add-port=53/udp 
-  firewall-cmd --reload
+* Step 8 - Firewall
+  `firewall-cmd --permanent --add-service={ntp,http,https,ldap,ldaps,kerberos,kpasswd}`
+  `firewall-cmd --permanent --add-port=53/udp`
+  `firewall-cmd --reload`
 
-Step 9 - Check if ipa work
+* Step 9 - Check if ipa work
   On the ipa server cli
-    kinit admin
+    `kinit admin`
     Password for admin@MYDOMAIN.LOCAL:
       
       ipa user-find
@@ -101,28 +101,29 @@ Step 9 - Check if ipa work
       Number of entries returned 1
       ----------------------------
 # Additional Steps for Slave replication
-Step 11 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.local)
+* Step 11 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.local)
   On the slave:
-    yum -y update
-    hostnamectl set-hostname ipa.mydomain.local
-    echo "192.168.1.11 ipa-slave.mydomain.local ipa-slave" >> /etc/hosts
-    nmcli con mod eth0 ipv4.dns 192.168.1.10 && nmcli con up eth0 (DNS IP address specified MUST is a MASTER IPA)
-    yum -y install ipa-server ipa-server-dns bind bind-dyndb-ldap
-    systemctl enable named && systemctl start named
+    `yum -y update`
+    `hostnamectl set-hostname ipa.mydomain.local`
+    `echo "192.168.1.11 ipa-slave.mydomain.local ipa-slave" >> /etc/hosts`
+    `nmcli con mod eth0 ipv4.dns 192.168.1.10 && nmcli con up eth0 (DNS IP address specified MUST is a MASTER IPA)`
+    `yum -y install ipa-server ipa-server-dns bind bind-dyndb-ldap`
+    `systemctl enable named && systemctl start named`
   
   On the master ipa:
-    ipa dnsrecord-add domain.local ipa-slave --a-rec 192.168.1.11 (create the PTR record!!!!)
-    ipa-replica-prepare ipa-slave.mydomain.local --ip-address 192.168.1.11
-    Directory Manager (existing master) password:
-    scp /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg root@ipa-slave.mydomain.local:/var/lib/ipa/
-    firewall-cmd --add-service=freeipa-replication --permanent
-    firewall-cmd --reload
+    `ipa dnsrecord-add domain.local ipa-slave --a-rec 192.168.100.11 (create the PTR record!!!!)`
+    `ipa-replica-prepare ipa-slave.mydomain.local --ip-address 192.168.100.11`
+  
+  Directory Manager (existing master) password:
+    `scp /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg root@ipa-slave.mydomain.local:/var/lib/ipa/`
+    `firewall-cmd --add-service=freeipa-replication --permanent`
+    `firewall-cmd --reload`
   
   On the slave:
-    dig -x 192.168.1.11 (check if ptr rcord is ok)
-    firewall-cmd --add-service={ssh,dns,freeipa-ldap,freeipa-ldaps,freeipa-replication} --permanent
-    firewall-cmd --reload
-    ipa-replica-install --setup-ca --setup-dns --no-forwarders /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg
+    `dig -x 192.168.1.11` (check if ptr reord is ok)
+    `firewall-cmd --add-service={ssh,dns,freeipa-ldap,freeipa-ldaps,freeipa-replication} --permanent`
+    `firewall-cmd --reload`
+    `ipa-replica-install --setup-ca --setup-dns --no-forwarders /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg`
       Directory Manager (existing master) password:
       Run connection check to master
       Check connection from replica to remote master 'dlp.srv.world':
@@ -148,7 +149,7 @@ Step 11 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.loc
       Restarting the web server
 
 Final step: installation client
-yum install ipa-client ipa-admintools
+`yum install ipa-client ipa-admintools`
 
 Verify this setting in /etc/sssd/sssd.conf
 ipa_server = _srv_, ipa-slave.mydomain.local
