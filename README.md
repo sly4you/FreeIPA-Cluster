@@ -80,8 +80,8 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
 	  These files are required to create replicas. The password for thes files is the Directory Manager password
 
 * Step 8 - Firewall<br/>
-  `firewall-cmd --permanent --add-service={ntp,http,https,ldap,ldaps,kerberos,kpasswd}`
-  `firewall-cmd --permanent --add-port=53/udp`
+  `firewall-cmd --permanent --add-service={ntp,http,https,ldap,ldaps,kerberos,kpasswd}`<br/>
+  `firewall-cmd --permanent --add-port=53/udp`<br/>
   `firewall-cmd --reload`
 
 * Step 9 - Check if ipa work<br/>
@@ -107,25 +107,26 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
       ----------------------------
       Number of entries returned 1
       ----------------------------
+
 # Additional Steps for Slave replication
 * Step 11 - Slave installation (IP: 192.168.1.11 - hostname: ipaslave.mydomain.local)
   On the slave:
-    `yum -y update`
-    `hostnamectl set-hostname ipa.mydomain.local`
-    `echo "192.168.1.11 ipa-slave.mydomain.local ipa-slave" >> /etc/hosts`
-    `nmcli con mod eth0 ipv4.dns 192.168.1.10 && nmcli con up eth0 (DNS IP address specified MUST is a MASTER IPA)`
-    `yum -y install ipa-server ipa-server-dns bind bind-dyndb-ldap`
-    `systemctl enable named && systemctl start named`
+    `yum -y update`<br/>
+    `hostnamectl set-hostname ipa.mydomain.local`<br/>
+    `echo "192.168.1.11 ipa-slave.mydomain.local ipa-slave" >> /etc/hosts`<br/>
+    `nmcli con mod eth0 ipv4.dns 192.168.1.10 && nmcli con up eth0 (DNS IP address specified MUST is a MASTER IPA)`<br/>
+    `yum -y install ipa-server ipa-server-dns bind bind-dyndb-ldap`<br/>
+    `systemctl enable named && systemctl start named`<br/>
   
-  On the master ipa:
-    `ipa dnsrecord-add domain.local ipa-slave --a-rec 192.168.100.11`
-    `ipa-replica-prepare ipa-slave.mydomain.local --ip-address 192.168.100.11`
+  On the master ipa:<br/>
+    `ipa dnsrecord-add domain.local ipa-slave --a-rec 192.168.100.11`<br/>
+    `ipa-replica-prepare ipa-slave.mydomain.local --ip-address 192.168.100.11`<br/>
   
-  Directory Manager (existing master) password:
-     `scp /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg \ `
-	 `root@ipa-slave.mydomain.local:/var/lib/ipa/`
+  Directory Manager (existing master) password:<br/>
+     `scp /var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg \ `<br/>
+	 `root@ipa-slave.mydomain.local:/var/lib/ipa/`<br/>
 	
-    `firewall-cmd --add-service=freeipa-replication --permanent`
+    `firewall-cmd --add-service=freeipa-replication --permanent`<br/>
 	
     `firewall-cmd --reload`
   
@@ -133,10 +134,10 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
     `dig -x 192.168.1.11` (check if ptr reord is ok)
     `firewall-cmd --add-service={ssh,dns,freeipa-ldap,freeipa-ldaps,freeipa-replication} --permanent`
 	
-    `firewall-cmd --reload`
+    `firewall-cmd --reload`<br/>
 	
-    `ipa-replica-install --setup-ca --setup-dns --no-forwarders \`
-	`/var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg`
+    `ipa-replica-install --setup-ca --setup-dns --no-forwarders \`<br/>
+	`/var/lib/ipa/replica-info-ipa-slave.mydomain.local.gpg`<br/>
 
       Directory Manager (existing master) password:
       Run connection check to master
@@ -162,8 +163,8 @@ This guide is written for CentOS/RHEL but, apart installation steps, you can ado
       You can use 'dnsconfig-mod' command to set global DNS options that would override settings in local named.conf files
       Restarting the web server
 
-Final step: installation client
-`yum install ipa-client ipa-admintools`
+Final step: installation client<br/>
+`yum install ipa-client ipa-admintools`<br/>
 
-Verify this setting in /etc/sssd/sssd.conf
+Verify this setting in /etc/sssd/sssd.conf<br/>
 ipa_server = _srv_, ipa-slave.mydomain.local
